@@ -1,0 +1,30 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: release-name-examples-openshift-pub
+  labels:
+    app.kubernetes.io/part-of: openshift-examples-simple
+    helm.sh/chart: openshift-examples-simple-0.1.0
+    app.kubernetes.io/name: examples-openshift-pub
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    route.openshift.io/termination: edge
+spec:
+  tls:
+    - hosts:
+        - "examples.openshift.pub"
+      secretName: examples-openshift-pub
+  rules:
+    - host: "examples.openshift.pub"
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: release-name-examples-openshift-pub
+                port:
+                  number: 8080

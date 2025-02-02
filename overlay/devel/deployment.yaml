@@ -1,0 +1,53 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-name-examples-stage-openshift-pub
+  labels:
+    app.openshift.io/runtime: nginx
+    app.kubernetes.io/component: nginx
+    app.kubernetes.io/part-of: openshift-examples-simple
+    helm.sh/chart: openshift-examples-simple-0.1.0
+    app.kubernetes.io/name: examples-stage-openshift-pub
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: examples-stage-openshift-pub
+      app.kubernetes.io/instance: release-name
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: examples-stage-openshift-pub
+        app.kubernetes.io/instance: release-name
+    spec:
+      serviceAccountName: default
+      securityContext:
+        {}
+      containers:
+        - name: openshift-examples-simple
+          securityContext:
+            {}
+          image: "quay.io/openshift-examples/web@sha256:618ccaf0769b6a927143443e1c5a2a2fac498930f7ba8db9c703b4b4b5d8bf8d"
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {}
+      nodeSelector:
+        kubernetes.io/arch: amd64
+        kubernetes.io/os: linux

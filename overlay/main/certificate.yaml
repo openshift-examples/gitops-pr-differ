@@ -1,0 +1,24 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: release-name-examples-openshift-pub
+  labels:
+    app.kubernetes.io/part-of: openshift-examples-simple
+    helm.sh/chart: openshift-examples-simple-0.1.0
+    app.kubernetes.io/name: examples-openshift-pub
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  commonName: "examples.openshift.pub"
+  dnsNames:
+    - "examples.openshift.pub"
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: cloudflare-openshift-pub
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  secretName: examples-openshift-pub
